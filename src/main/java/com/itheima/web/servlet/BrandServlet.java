@@ -39,9 +39,7 @@ public class BrandServlet extends BaseServlet {
         BufferedReader br=req.getReader();
         String params = br.readLine();
 
-        System.out.println(params);
         int id=Integer.parseInt(params);
-
 
         Brand brand = service.selectById(id);
 

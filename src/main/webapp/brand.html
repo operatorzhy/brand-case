@@ -18,21 +18,22 @@
 <div id="app">
 
     <!--搜索表单-->
-    <el-form :inline="true" :model="brand" class="demo-form-inline">
+    <el-form :inline="true" :model="brand1" class="demo-form-inline">
 
         <el-form-item label="当前状态">
-            <el-select v-model="brand.status" placeholder="当前状态">
+            <el-select v-model="brand1.status" placeholder="当前状态">
                 <el-option label="启用" value="1"></el-option>
                 <el-option label="禁用" value="0"></el-option>
+                <el-option label="全部" value=""></el-option>
             </el-select>
         </el-form-item>
 
         <el-form-item label="企业名称">
-            <el-input v-model="brand.companyName" placeholder="企业名称"></el-input>
+            <el-input v-model="brand1.companyName" placeholder="企业名称"></el-input>
         </el-form-item>
 
         <el-form-item label="品牌名称">
-            <el-input v-model="brand.brandName" placeholder="品牌名称"></el-input>
+            <el-input v-model="brand1.brandName" placeholder="品牌名称"></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -55,25 +56,25 @@
             width="30%"
             >
 
-        <el-form ref="form" :model="brand" label-width="80px">
+        <el-form ref="form" :model="brand2" label-width="80px">
             <el-form-item label="品牌名称">
-                <el-input v-model="brand.brandName"></el-input>
+                <el-input v-model="brand2.brandName"></el-input>
             </el-form-item>
 
             <el-form-item label="企业名称">
-                <el-input v-model="brand.companyName"></el-input>
+                <el-input v-model="brand2.companyName"></el-input>
             </el-form-item>
 
             <el-form-item label="排序">
-                <el-input v-model="brand.ordered"></el-input>
+                <el-input v-model="brand2.ordered"></el-input>
             </el-form-item>
 
             <el-form-item label="备注">
-                <el-input type="textarea" v-model="brand.description"></el-input>
+                <el-input type="textarea" v-model="brand2.description"></el-input>
             </el-form-item>
 
             <el-form-item label="状态">
-                <el-switch v-model="brand.status"
+                <el-switch v-model="brand2.status"
                            active-value="1"
                            inactive-value="0"
                 ></el-switch>
@@ -95,28 +96,27 @@
             width="30%"
     >
 
-        <el-form ref="form" :model="brand" label-width="80px">
+        <el-form ref="form" :model="brand3" label-width="80px">
             <el-form-item label="品牌名称">
-                <el-input v-model="brand.brandName" prop="brand.brandName"></el-input>
+                <el-input v-model="brand3.brandName"></el-input>
             </el-form-item>
 
             <el-form-item label="企业名称">
-                <el-input v-model="brand.companyName" prop="brand.companyName"></el-input>
+                <el-input v-model="brand3.companyName"></el-input>
             </el-form-item>
 
             <el-form-item label="排序">
-                <el-input v-model="brand.ordered" prop="brand.ordered"></el-input>
+                <el-input v-model="brand3.ordered"></el-input>
             </el-form-item>
 
             <el-form-item label="备注">
-                <el-input type="textarea" v-model="brand.description" prop="brand.description"></el-input>
+                <el-input type="textarea" v-model="brand3.description"></el-input>
             </el-form-item>
 
             <el-form-item label="状态">
-                <el-switch v-model="brand.status"
+                <el-switch v-model="brand3.status"
                            active-value="1"
                            inactive-value="0"
-                           prop="brand.status"
                 ></el-switch>
             </el-form-item>
 
@@ -137,7 +137,6 @@
                 style="width: 100%"
                 :row-class-name="tableRowClassName"
                 @selection-change="handleSelectionChange"
-                @row-click="handleRow"
         >
             <el-table-column
                     type="selection"
@@ -237,6 +236,7 @@
             // 查询方法
             onSubmit() {
                 //console.log(this.brand);
+                this.brand=this.brand1;
                 this.selectByPageAndCondition();
             },
             // 添加数据
@@ -246,7 +246,7 @@
                 axios({
                     method: "post",
                     url:"http://localhost/brand-case/brand/add",
-                    data:_this.brand
+                    data:_this.brand2
 
                 }).then(function (resp){
                     if(resp.data=="success"){
@@ -271,7 +271,7 @@
                     data:row.id
 
                 }).then(function (resp){
-                    _this.brand=resp.data;
+                    _this.brand3=resp.data;
                     _this.dialogVisibleForUpdate = true;
 
                 });
@@ -284,7 +284,7 @@
                 axios({
                     method: "post",
                     url:"http://localhost/brand-case/brand/update",
-                    data:_this.brand
+                    data:_this.brand3
 
                 }).then(function (resp){
                     if(resp.data=="success"){
@@ -393,6 +393,33 @@
                 dialogVisible: false,
                 // 品牌模型数据
                 brand: {
+                    status: '',
+                    brandName: '',
+                    companyName: '',
+                    id:"",
+                    ordered:"",
+                    description:""
+                },
+                /*用于搜索表单时提交数据*/
+                brand1: {
+                    status: '',
+                    brandName: '',
+                    companyName: '',
+                    id:"",
+                    ordered:"",
+                    description:""
+                },
+                /*用于添加公司时处理表单数据*/
+                brand2: {
+                    status: '',
+                    brandName: '',
+                    companyName: '',
+                    id:"",
+                    ordered:"",
+                    description:""
+                },
+                /*用于修改数据时处理表单数据*/
+                brand3: {
                     status: '',
                     brandName: '',
                     companyName: '',
