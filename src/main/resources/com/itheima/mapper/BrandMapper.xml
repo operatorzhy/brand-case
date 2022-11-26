@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.BrandMapper">
+
+    <resultMap id="brandResultMap" type="brand">
+        <result property="brandName" column="brand_name" />
+        <result property="companyName" column="company_name" />
+    </resultMap>
+
+
+    <!--批量删除-->
+    <delete id="deleteByIds">
+        delete from tb_brand where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--条件分页查询-->
+    <select id="selectByPageAndCondition" resultMap="brandResultMap">
+        select *
+        from tb_brand
+        <where>
+            <if test="brand.brandName!=null and brand.brandName!=''">
+                and brand_name like #{brand.brandName}
+            </if>
+            <if test="brand.companyName!=null and brand.companyName!=''">
+                and company_name like #{brand.companyName}
+            </if>
+            <if test="brand.status!=null">
+                and status=#{brand.status}
+            </if>
+        </where>
+        limit #{begin},#{size}
+    </select>
+
+    <!--条件查询总记录数-->
+    <!--这里需要注意一下,这里并没有使用param映射变量,所以那使用变量的时候直接使用属性即可,如果要是像brand.brandName这样使用的话会报错的!!!-->
+    <select id="selectTotalCountByCondition" resultType="java.lang.Integer">
+        select count(*)
+        from tb_brand
+        <where>
+            <if test="brandName!=null and brandName!=''">
+                and brand_name like #{brandName}
+            </if>
+            <if test="companyName!=null and companyName!=''">
+                and company_name like #{companyName}
+            </if>
+            <if test="status!=null">
+                and status=#{status}
+            </if>
+        </where>
+    </select>
+
+    <!--根据id查询出brand对象-->
+    <select id="selectById"  resultMap="brandResultMap" resultType="com.itheima.pojo.Brand">
+        select * from tb_brand where id=#{id}
+    </select>
+    <!--根据id修改brand对象-->
+    <update id="update">
+        update tb_brand
+        set brand_name=#{brandName},company_name=#{companyName},ordered=#{ordered},description=#{description},status=#{status}
+        where id=#{id}
+    </update>
+</mapper>
